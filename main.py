@@ -1,5 +1,4 @@
-**فائل 1۔ نام: `main.py`**
-```python
+
 import os, json, random, hashlib, time, subprocess, asyncio, requests
 import edge_tts
 
@@ -120,43 +119,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
-**فائل 2۔ نام: `requirements.txt`**
-```
-requests
-edge-tts
-```
-
-**فائل 3۔ نام: `.github/workflows/daily.yml`**
-```yaml
-name: Daily Ibrat Video
-
-on:
-  schedule:
-    - cron: "0 13 * * *"
-  workflow_dispatch:
-
-jobs:
-  make-video:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install ffmpeg and packages
-        run: |
-          sudo apt-get update && sudo apt-get install -y ffmpeg
-          pip install -r requirements.txt
-      - name: Run agent
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          MY_WHATSAPP: ${{ secrets.MY_WHATSAPP }}
-        run: python main.py ye agenthy
