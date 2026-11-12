@@ -52,7 +52,7 @@ def download_clips(query, n=3):
     videos = r.json().get("videos", [])
     if not videos:
         r = requests.get("https://api.pexels.com/videos/search",
-                         headers={"Authorization": PEXELS_KEY},
+                         headers={"Authorization": PIXABAY_KEY},
                          params={"query": "nature sky", "orientation": "portrait", "per_page": 10},
                          timeout=60)
         videos = r.json()["videos"]
