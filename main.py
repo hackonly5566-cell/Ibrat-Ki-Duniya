@@ -43,11 +43,11 @@ pixabay_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے 
 async def make_voice(text, path):
     await edge_tts.Communicate(text, VOICE).save(path)
 def download_clips(query, n=3):
-    r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": query, "orientation": "vertical", "per_page": 10}, timeout=60)
+    r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": query,"per_page": 10}, timeout=60)
     r.raise_for_status()
     videos = r.json().get("hits", [])
     if not videos:
-        r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": "nature sky", "orientation": "vertical", "per_page": 10}, timeout=60)
+        r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q":"nature sky", "per_page": 10}, timeout=60)
         videos = r.json().get("hits", [])
     random.shuffle(videos)
     paths = []
