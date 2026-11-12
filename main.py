@@ -45,7 +45,7 @@ async def make_voice(text, path):
 
 def download_clips(query, n=3):
     r = requests.get("https://api.pexels.com/videos/search",
-                     headers={"Authorization": PEXELS_KEY},
+                     headers={"Authorization": PIXABAY_KEY},
                      params={"query": query, "orientation": "portrait", "per_page": 10},
                      timeout=60)
     r.raise_for_status()
