@@ -3,7 +3,7 @@ import os, json, random, hashlib, time, subprocess, asyncio, requests
 import edge_tts
 
 GEMINI_KEY = os.environ["GEMINI_API_KEY"]
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
 PIXABAY_KEY = os.environ["PIXABAY_API_KEY"]
 CLOUD_NAME = os.environ["CLOUDINARY_CLOUD_NAME"]
 CLOUD_KEY = os.environ["CLOUDINARY_API_KEY"]
@@ -31,7 +31,7 @@ script: وائس اوور کا مکمل متن (اردو رسم الخط)
 caption: فیس بک کیپشن، اردو، ایموجی کے ساتھ، 2 سے 3 جملے
 hashtags: 5 اردو ہیش ٹیگز ایک سٹرنگ میں
 pexels_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے مزاج سے ملتی ویڈیو تلاش کریں (مثلاً sad old man, sunset village, rain window)"""
-    url = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_KEY}"
     r = requests.post(url, json={
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"responseMimeType": "application/json"},
