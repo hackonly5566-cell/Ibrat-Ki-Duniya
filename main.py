@@ -30,7 +30,7 @@ title: اردو عنوان
 script: وائس اوور کا مکمل متن (اردو رسم الخط)
 caption: فیس بک کیپشن، اردو، ایموجی کے ساتھ، 2 سے 3 جملے
 hashtags: 5 اردو ہیش ٹیگز ایک سٹرنگ میں
-pexels_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے مزاج سے ملتی ویڈیو تلاش کریں (مثلاً sad old man, sunset village, rain window)"""
+pixabay_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے مزاج سے ملتی ویڈیو تلاش کریں (مثلاً sad old man, sunset village, rain window)"""
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_KEY}"
     r = requests.post(url, json={
         "contents": [{"parts": [{"text": prompt}]}],
@@ -42,30 +42,24 @@ pexels_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے �
 
 async def make_voice(text, path):
     await edge_tts.Communicate(text, VOICE).save(path)
-
 def download_clips(query, n=3):
-    r = requests.get("https://api.pexels.com/videos/search",
-                     headers={"Authorization": PIXABAY_KEY},
-                     params={"query": query, "orientation": "portrait", "per_page": 10},
-                     timeout=60)
+    r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": query, "orientation": "vertical", "per_page": 10}, timeout=60)
     r.raise_for_status()
-    videos = r.json().get("videos", [])
+    videos = r.json().get("hits", [])
     if not videos:
-        r = requests.get("https://api.pexels.com/videos/search",
-                         headers={"Authorization": PIXABAY_KEY},
-                         params={"query": "nature sky", "orientation": "portrait", "per_page": 10},
-                         timeout=60)
-        videos = r.json()["videos"]
+        r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": "nature sky", "orientation": "vertical", "per_page": 10}, timeout=60)
+        videos = r.json().get("hits", [])
     random.shuffle(videos)
     paths = []
     for i, v in enumerate(videos[:n]):
-        files = [f for f in v["video_files"] if f.get("width") and f["width"] <= 1080]
-        files.sort(key=lambda f: abs(f["width"] - 720))
-        data = requests.get(files[0]["link"], timeout=180).content
+        files = [f for f in v["videos"].values() if f.get("url")]
+        files.sort(key=lambda f: abs(f.get("width", 720) - 720))
+        data = requests.get(files[0]["url"], timeout=180).content
         p = f"raw_{i}.mp4"
         open(p, "wb").write(data)
         paths.append(p)
     return paths
+
 
 def run(cmd):
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
@@ -108,7 +102,7 @@ def main():
     story = make_story()
     print("Title:", story["title"])
     asyncio.run(make_voice(story["script"], "voice.mp3"))
-    clips = download_clips(story["pexels_query"])
+    clips = download_clips(story["pixabay_query"])
     build_video(clips, "voice.mp3", "final.mp4")
     print("Video MB:", round(os.path.getsize("final.mp4") / 1e6, 2))
     url = upload_cloudinary("final.mp4")
