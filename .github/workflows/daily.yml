@@ -1,18 +1,43 @@
+
 name: Daily Video
+
 on:
   schedule:
     - cron: '0 5 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - name: Run
+          cache: pip
+
+      - name: Install Requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check API Secrets
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: |
+          test -n "$GEMINI_API_KEY" || exit 1
+          test -n "$PIXABAY_API_KEY" || exit 1
+
+      - name: Generate Video
         run: python main.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -24,10 +49,15 @@ jobs:
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
           TWILIO_WHATSAPP_FROM: ${{ secrets.TWILIO_WHATSAPP_FROM }}
           MY_WHATSAPP: ${{ secrets.MY_WHATSAPP }}
-      - name: Save
+
+      - name: Save Changes
         run: |
           git config user.name "bot"
           git config user.email "bot@bot.com"
-          git add .
-          git commit -m "daily video" || true
-          git push
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "daily video"
+            git push
+          else
+            echo "No changes to save"
+          fi
