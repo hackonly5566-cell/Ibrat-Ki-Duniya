@@ -4,7 +4,7 @@ import edge_tts
 
 GEMINI_KEY = os.environ["GEMINI_API_KEY"]
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-PIXABAY_KEY = os.environ["58580632-07c43614bd6c680f9ee0a443d"]
+PIXABAY_KEY = os.environ["PIXABAY_API_KEY"]
 CLOUD_NAME = os.environ["CLOUDINARY_CLOUD_NAME"]
 CLOUD_KEY = os.environ["CLOUDINARY_API_KEY"]
 CLOUD_SECRET = os.environ["CLOUDINARY_API_SECRET"]
