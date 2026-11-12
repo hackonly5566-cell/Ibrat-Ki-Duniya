@@ -3,7 +3,7 @@ import os, json, random, hashlib, time, subprocess, asyncio, requests
 import edge_tts
 
 GEMINI_KEY = os.environ["GEMINI_API_KEY"]
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 PIXABAY_KEY = os.environ["PIXABAY_API_KEY"]
 CLOUD_NAME = os.environ["CLOUDINARY_CLOUD_NAME"]
 CLOUD_KEY = os.environ["CLOUDINARY_API_KEY"]
