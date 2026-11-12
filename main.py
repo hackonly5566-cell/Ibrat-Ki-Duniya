@@ -42,23 +42,7 @@ pixabay_query: انگریزی میں 2 سے 3 الفاظ، جو کہانی کے 
 
 async def make_voice(text, path):
     await edge_tts.Communicate(text, VOICE).save(path)
-def download_clips(query, n=3):
-    r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q": query,"per_page": 10}, timeout=60)
-    r.raise_for_status()
-    videos = r.json().get("hits", [])
-    if not videos:
-        r = requests.get("https://pixabay.com/api/videos/", params={"key": PIXABAY_KEY, "q":"nature sky", "per_page": 10}, timeout=60)
-        videos = r.json().get("hits", [])
-    random.shuffle(videos)
-    paths = []
-    for i, v in enumerate(videos[:n]):
-        files = [f for f in v["videos"].values() if f.get("url")]
-        files.sort(key=lambda f: abs(f.get("width", 720) - 720))
-        data = requests.get(files[0]["url"], timeout=180).content
-        p = f"raw_{i}.mp4"
-        open(p, "wb").write(data)
-        paths.append(p)
-    return paths
+
 
 
 def run(cmd):
