@@ -34,14 +34,14 @@ CLOUD_NAME = os.environ["CLOUDINARY_CLOUD_NAME"]
 CLOUD_KEY = os.environ["CLOUDINARY_API_KEY"]
 CLOUD_SECRET = os.environ["CLOUDINARY_API_SECRET"]
 
-TW_SID = os.environ["TWILIO_ACCOUNT_SID"]
-TW_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+TW_SID = os.environ.get("TWILIO_ACCOUNT_SID", "")
+TW_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "")
+TW_TO = os.environ.get("MY_WHATSAPP", "")
 
 TW_FROM = os.environ.get(
     "TWILIO_WHATSAPP_FROM",
     "whatsapp:+14155238886"
 )
-TW_TO = os.environ["MY_WHATSAPP"]
 
 VOICE = os.environ.get(
     "TTS_VOICE",
