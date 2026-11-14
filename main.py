@@ -270,9 +270,10 @@ Return ONLY valid JSON with this structure:
 async def make_voice(text, path):
     communicate = edge_tts.Communicate(
         text=text,
-        voice=VOICE,
+        voice="ps-AF-LatifaNeural",
         rate="+0%",
-        volume="+0%"
+        volume="+0%",
+        pitch="+0Hz"
     )
 
     await communicate.save(str(path))
