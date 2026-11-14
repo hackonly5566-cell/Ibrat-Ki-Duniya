@@ -252,18 +252,26 @@ Return ONLY valid JSON with this structure:
         log("Story too short. Requesting a longer version.")
 
         story = gemini_request(
-            prompt +
-            "\nIMPORTANT: Your previous output was too short. "
-            "Write a complete long story of at least 1000 words."
-        )
+word_count = len(story["script"].split())
 
-    if len(story["script"].split()) < 600:
-        raise RuntimeError(
-            "Story is too short. Stopping instead of "
-            "creating a misleading 10-minute video."
-        )
+if word_count < 1000:
+    log(f"Story has only {word_count} words. Requesting a longer version.")
 
-    return story
+    story = gemini_request(
+        prompt +
+        "\nIMPORTANT: Write a complete original Pashto story "
+        "between 1000 and 1150 words. Do not summarize or finish early."
+    )
+
+word_count = len(story["script"].split())
+
+if word_count < 1000:
+    raise RuntimeError(
+        f"Story is too short: {word_count} words. "
+        "Need at least 1000 words."
+    )
+
+log(f"Story word count: {word_count}")
 
 
 async def make_voice(text, path):
