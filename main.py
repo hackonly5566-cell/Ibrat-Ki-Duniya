@@ -248,13 +248,13 @@ Return ONLY valid JSON with this structure:
         if key not in story:
             raise ValueError(f"Story missing field: {key}")
 
-    if len(story["script"].split()) < 600:
+    if len(story["script"].split()) < 1500:
         log("Story too short. Requesting a longer version.")
 
         story = gemini_request(
 word_count = len(story["script"].split())
 
-if word_count < 1000:
+if word_count < 1500:
     log(f"Story has only {word_count} words. Requesting a longer version.")
 
     story = gemini_request(
@@ -265,10 +265,10 @@ if word_count < 1000:
 
 word_count = len(story["script"].split())
 
-if word_count < 1000:
+if word_count < 1500:
     raise RuntimeError(
         f"Story is too short: {word_count} words. "
-        "Need at least 1000 words."
+        "Need at least 1500 words."
     )
 
 log(f"Story word count: {word_count}")
